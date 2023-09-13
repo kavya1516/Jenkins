@@ -31,7 +31,7 @@ pipeline {
                         withCredentials([string(credentialsId: '539ffd57-439b-40c0-96de-a48f76776957', variable: 'SONAR_AUTH_TOKEN')]) {
                             bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn sonar:sonar ' +
                                 '-Dsonar.projectName=spring-boot-app -Dsonar.projectKey=spring-boot-app ' +
-                                '-Dsonar.java.binaries=. ' 
+                                '-Dsonar.java.binaries=. '
                     }
                 }
             }
