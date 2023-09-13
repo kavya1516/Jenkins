@@ -33,7 +33,19 @@ pipeline {
                 }
             }
         }
-
+        stage('Sonar Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-scanner') {
+                    script {
+                        def scannerHome = tool 'sonar-scanner'
+                        bat script: 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn sonar:sonar ' +
+                            '-Dsonar.projectName=spring-boot-app -Dsonar.projectKey=spring-boot-app ' +
+                            '-Dsonar.java.binaries=. ' +
+                            'returnStatus: true'
+                    }
+                }
+            }
+        }
 
         stage('Build and Push Docker Image') {
             environment {
