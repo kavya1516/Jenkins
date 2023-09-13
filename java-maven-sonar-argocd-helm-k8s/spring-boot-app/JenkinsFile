@@ -15,7 +15,7 @@ pipeline {
             steps {
                 bat 'dir'  // Equivalent to 'ls -ltr' on Windows
                 // Build the project and create a JAR file
-                bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn clean package'
+                bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn clean package' 
             }
         }
         
