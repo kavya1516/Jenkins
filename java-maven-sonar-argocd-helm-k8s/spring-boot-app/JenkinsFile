@@ -44,23 +44,26 @@ pipeline {
                 GIT_USER_NAME = "kavya1516"
             }
             steps {
-                withCredentials([string(credentialsId: 'bafe1474-147d-4685-ad51-966ef5606ec4', variable: 'GITHUB_TOKEN')]) {
-                    bat '''
-                        git config user.email "kavya.devops1607@gmail.com"
-                        git config user.name "kavya1516"
-                        SET BUILD_NUMBER=%BUILD_NUMBER%
-                        (echo off
-                        for /f "tokens=*" %%a in ('type java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml') do (
-                            set "line=%%a"
-                            setlocal enabledelayedexpansion
-                            set "line=!line:replaceImageTag=!BUILD_NUMBER!!"
-                            echo(!line!
-                            endlocal
-                        )) > java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml
-                        git add java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml
-                        git commit -m "Update deployment image to version %BUILD_NUMBER%"
-                        git push https://%GITHUB_TOKEN%@github.com/%GIT_USER_NAME%/%GIT_REPO_NAME% HEAD:main
-                    '''
+                script {
+                    // Use the secret text credential to retrieve the GitHub token
+                    def githubToken = credentials('bafe1474-147d-4685-ad51-966ef5606ec4')
+                    withCredentials([usernamePassword(credentialsId: 'bafe1474-147d-4685-ad51-966ef5606ec4', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        bat '''
+                            git config user.email "kavya.devops1607@gmail.com"
+                            git config user.name "kavya1516"
+                            SET BUILD_NUMBER=%BUILD_NUMBER%
+                            (echo off
+                            for /f "tokens=*" %%a in ('type java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml') do (
+                                set "line=%%a"
+                                setlocal enabledelayedexpansion
+                                set "line=!line:replaceImageTag=!BUILD_NUMBER!!"
+                                echo(!line!
+                                endlocal
+                            )) > java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml
+                            git add java-maven-sonar-argocd-helm-k8s\\spring-boot-app-manifests\\deployment.yml
+                            git commit -m "Update deployment image to version %BUILD_NUMBER%"
+                            git push https://%GITHUB_TOKEN%@github.com/%GIT_USER_NAME%/%GIT_REPO_NAME% HEAD:main
+                        '''
                 }
             }
         }
