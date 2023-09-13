@@ -18,24 +18,6 @@ pipeline {
                 bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn clean package'
             }
         }
-
-        stage('Sonar Analysis') {
-             environment {
-                 SONAR_URL = "http://localhost:9000"// Replace with your SonarQube server URL
-                 SONAR_AUTH_TOKEN = "squ_dd1318e9ed2dfccc233a52d6d750fe56281b39d7" 
-            }
-            steps {
-                withSonarQubeEnv('sonar-scanner') {
-                    script {
-                        def scannerHome = tool 'sonar-scanner'
-                        withCredentials([string(credentialsId: '539ffd57-439b-40c0-96de-a48f76776957', variable: 'SONAR_AUTH_TOKEN')]) {
-                            bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn sonar:sonar ' +
-                                '-Dsonar.projectName=spring-boot-app -Dsonar.projectKey=spring-boot-app ' +
-                                '-Dsonar.java.binaries=. '
-                    }
-                }
-            }
-        }
         
         stage('Build and Push Docker Image') {
             environment {
