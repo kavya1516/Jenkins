@@ -18,21 +18,7 @@ pipeline {
                 bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn clean package'
             }
         }
-        stage('Static Code Analysis') {
-            environment {
-                SONAR_URL = "http://localhost:9000"
-            }
-            steps {
-                withSonarQubeEnv('sonar-scanner') {
-                    script {
-                        def scannerHome = tool 'sonar-scanner'
-                        bat 'cd java-maven-sonar-argocd-helm-k8s\\spring-boot-app && mvn sonar:sonar ' +
-                            '-Dsonar.projectName=spring-boot-app -Dsonar.projectKey=spring-boot-app ' +
-                            '-Dsonar.java.binaries=. -Dsonar.login=%SONAR_AUTH_TOKEN% -Dsonar.host.url=%SONAR_URL%'
-                    }
-                }
-            }
-        }
+
         stage('Sonar Analysis') {
             steps {
                 withSonarQubeEnv('sonar-scanner') {
